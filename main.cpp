@@ -93,7 +93,7 @@ void countblank_file()
     printf("Blanks: %d\nTabs: %d\nNewlines: %d\n", ns, nt, nl);
     fclose(fp);
 }
-void countblank1(){
+void removeblank1(){
     int c;
     while ((c = getchar()) != EOF)
     {
@@ -106,7 +106,7 @@ void countblank1(){
     }
 }
 
-void countblank2()
+void removeblank2()
 {
     int c;
     while((c = getchar())!= EOF) {
@@ -120,7 +120,51 @@ void countblank2()
         }
         putchar(c);
     }
+}
 
+// 输入一行最大长度为 nmax 的字符串，并返回其长度
+int getline(char line[], int nmax)
+{
+    int len;
+    char c;
+    len = 0;
+    printf("Enter a string [CR to exit]: ");
+    while(((c=getchar())!='\n') && len<nmax-1)
+        line[len++]=c;
+    line[len]='\0';
+    return len;
+}
+// 将多个连续空格替换为一个空格，并返回替换后的字符串的长度
+int compact1(char line[])
+{
+    int cursor=0;  // 即字符数组的当前下标
+    int prevspace = 0;  // 如果上一个位置是字符串则返回true
+    int lcv=0;
+    if(line[cursor]=='\0')
+        return 0;
+    do{
+        if((line[cursor]==' ')&&prevspace){
+            // 如果一个空格前面还有一个空格，那么将后面的字符串左移一个位置
+            for(lcv=cursor;line[lcv];lcv++)
+                line[lcv]=line[lcv+1];
+        }else
+            prevspace=(line[cursor++]==' ');
+    }while(line[cursor]);
+    return cursor;
+}
+// 将多个连续空格替换为一个空格，并返回替换后的字符串的长度
+int compact2(char line[])
+{
+    int cursor=0;  // 字符数组的当前下标
+    int prevspace = 0;  // 如果上一个位置是字符串则返回true
+    int lcv = 0;  // 将字符串复制到哪个位置
+    do{
+        if(!((line[cursor]==' ')&&prevspace)){
+            line[lcv++]=line[cursor];
+            prevspace=(line[cursor]==' ');
+        }
+    }while(line[cursor++]);
+    return(lcv-1);  // 遇到 '\0' 返回 -1
 }
 
 int main()
